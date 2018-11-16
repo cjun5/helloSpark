@@ -1,7 +1,8 @@
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.functions._
 
-object WindowTest {
+object RankTest {
 
   def main(args: Array[String]): Unit = {
 
@@ -24,9 +25,12 @@ object WindowTest {
 
     val dd = Seq(p1, p2, p3, p4, p5, p6, p7, p8).toDF("date", "product", "amount")
 
-    dd.groupBy(window(unix_timestamp('date).cast("timestamp"), "5 minutes"), 'product).agg(sum('amount)).show(false)
-//    dd.groupBy(window(unix_timestamp(dd("date")).cast("timestamp"), "5 minutes"), 'product).agg(sum('amount)).show(false)
+    val w1 = Window.partitionBy("product").orderBy("amount")
+    val w2 = Window.orderBy("amount")
 
+    dd.select('product, 'amount,
+      row_number().over(w1).as("rownum"),
+      rank().over(w2).as("rank")).show()
 
   }
 
