@@ -25,7 +25,8 @@ object UdfTest {
 
     val df = Seq(p1, p2, p3).toDF("name", "age", "job")
 
-    df.select('name, 'age, 'job, fn1('job)).show
+    df.select($"name", 'age, 'job, fn1('job)).show
+    //    df.select('name, 'age, 'job, fn1('job)).explain()
 
   }
 
