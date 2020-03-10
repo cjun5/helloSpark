@@ -11,7 +11,7 @@ object BucketTest {
 
     val spark = SparkSession
       .builder()
-      .appName("WindowTest")
+      .appName("BucketTest")
       .master("local[*]")
       .getOrCreate()
 
@@ -26,11 +26,10 @@ object BucketTest {
     val metadata = spark.sessionState.catalog.getTableMetadata(TableIdentifier(tableName))
     println(metadata.bucketSpec)
 
-    val filteredBuckts = spark.sql(s"select * from ${tableName} where user_id = 'user1'")
+    val filteredBuckets = spark.sql(s"select * from ${tableName} where user_id = 'user1'")
 
     println("========== executedPlan ==========")
-    println(filteredBuckts.queryExecution.executedPlan.toString())
+    println(filteredBuckets.queryExecution.executedPlan.toString())
   }
-
 
 }
